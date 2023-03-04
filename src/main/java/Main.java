@@ -1,3 +1,4 @@
+import static mcunit.Assertions.assertFalse;
 import static mcunit.Assertions.assertTrue;
 
 public class Main {
@@ -16,8 +17,8 @@ public class Main {
         }
 
         try {
-            System.out.println("## Case 2: x + y != 4 (should FAIL)");
-            assertTrue(x + y == 4);
+            System.out.println("## Case 2: x + y != 4 (should PASS)");
+            assertFalse(x + y == 4);
             System.out.println("PASSED");
         } catch(AssertionError ae) {
             System.out.println("FAILED");

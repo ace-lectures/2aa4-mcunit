@@ -6,4 +6,8 @@ public class Assertions {
             throw new AssertionError();
     }
 
+    public static void assertFalse(boolean condition) {
+        assertTrue(!condition);
+    }
+
 }
