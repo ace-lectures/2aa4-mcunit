@@ -10,4 +10,11 @@ public class Assertions {
         assertTrue(!condition);
     }
 
+    public static void assertEquals(Object left, Object right) {
+        assertTrue(left.equals(right));
+    }
+
+    public static void assertNotEquals(Object left, Object right) {
+        assertFalse(left.equals(right));
+    }
 }
