@@ -11,6 +11,8 @@ public abstract class TestCase {
             System.out.println("PASSED");
         } catch(AssertionError ae) {
             System.out.println("FAILED");
+        } catch (Exception e) {
+            System.out.println("ERROR");
         }
     }
 

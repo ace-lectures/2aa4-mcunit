@@ -1,5 +1,6 @@
 import tests.AddTwoIntegers;
 import tests.SubtractTwoIntegers;
+import tests.ThrowAnException;
 
 public class Main {
     
@@ -8,6 +9,7 @@ public class Main {
 
         (new AddTwoIntegers()).run();
         (new SubtractTwoIntegers()).run();
+        (new ThrowAnException()).run();
 
     }
 
