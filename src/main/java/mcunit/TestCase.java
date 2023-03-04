@@ -1,8 +1,9 @@
 package mcunit;
 
-public abstract class TestCase {
+public abstract class TestCase implements Test {
 
-    public final TestResult run() {
+    @Override
+    public final void run(TestReport collector) {
         TestResult result = new TestResult(this.getClass().getCanonicalName());
         try {
             setUp();
@@ -15,7 +16,7 @@ public abstract class TestCase {
         } finally {
             tearDown();
         }
-        return result;
+        collector.collect(result);
     }
 
     protected void setUp() { }

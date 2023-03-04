@@ -9,9 +9,9 @@ public class Main {
         System.out.println("# 2AA4 - McUnit Demo");
 
         TestReport report = new TestReport();
-        report.collect(new AddTwoIntegers().run());
-        report.collect((new SubtractTwoIntegers()).run());
-        report.collect((new ThrowAnException()).run());
+        new AddTwoIntegers().run(report);
+        new SubtractTwoIntegers().run(report);
+        new ThrowAnException().run(report);
 
         System.out.println(report);
     }
