@@ -5,10 +5,16 @@ import static mcunit.Assertions.assertEquals;
 
 public class AddTwoIntegers extends TestCase {
 
+    int x, y;
+
+    @Override
+    protected void setUp() {
+        this.x = 1;
+        this.y = 1;
+    }
+
     @Override
     protected void test() {
-        int y = 1;
-        int x = 1;
         assertEquals(x + y, 2); // should pass
     }
 }
