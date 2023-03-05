@@ -1,0 +1,11 @@
+@startuml
+
+!include ./common.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+note "Size: 5 Locs" as N1 
+
+@enduml

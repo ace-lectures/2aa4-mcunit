@@ -1,0 +1,89 @@
+@startuml
+
+!include ./common.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+package mcunit {
+
+    class Assertions {
+        + {static} assertTrue(c: bool)
+        + {static} assertFalse(c: bool)
+        + {static} assertEquals(o1: Object, o2: Object)
+    }   
+
+    abstract class TestCase {
+        + <<final>> run(): TestResult
+        --
+        # setUp()
+        # tearDown()
+        --
+        # {abstract} test()
+    }
+
+    enum STATUS {
+        + PASSED
+        + FAILED
+        + ERRORED
+    }
+
+    class TestResult {
+        - name: String
+        --
+        + this(name: String)
+        --
+        + record(status: STATUS)
+        + status(): STATUS
+        --
+        + toString(): String
+    }
+
+    TestResult *-> STATUS
+
+    class TestReport {
+        + this()
+        --
+        + collect(result: TestResult)
+        --
+        + toString(): String
+    }
+
+    TestReport *--> "*" TestResult
+    TestCase .> TestResult
+
+
+}
+
+package tests {
+    class AddTwoIntegers {
+        # <<override>> test()
+    }
+    class SubtractTwoIntegers {
+        # <<override>> test()
+    }
+    class ThrowAnException {
+        # <<override>> test()
+    }
+
+}
+
+TestCase <|-- tests.AddTwoIntegers 
+TestCase <|-- tests.SubtractTwoIntegers 
+TestCase <|-- tests.ThrowAnException
+
+Main ..> tests
+Main .> TestReport
+TestReport .[hidden] Assertions
+
+note as N1 
+ Size: 
+   - Main: 14 LoCs
+   - mcunit: 82 LoCs
+   - tests: 39 LocS
+endnote
+
+N1 .[hidden]. tests
+
+@enduml

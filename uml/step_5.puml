@@ -1,0 +1,102 @@
+@startuml
+
+!include ./common.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+package mcunit {
+
+    class Assertions {
+        + {static} assertTrue(c: bool)
+        + {static} assertFalse(c: bool)
+        + {static} assertEquals(o1: Object, o2: Object)
+    }   
+
+    interface Test {
+        + run(collector: TestReport)
+    }
+
+    abstract class TestCase <<final>> implements Test {
+        - {static} SETUP = "setUp"
+        - {static} TEARDOWN = "tearDown"
+        --
+        + <<final>> run(collector: TestReport)
+        --
+        - runSetUp(context: Object)
+        - runTest(context: Object)
+        - runTearDown(context: Object)
+    }
+
+    class TestSuite implements Test {
+        + <<final>> run(collector: TestReport)
+        --
+        + add(test: Test)
+    }
+
+
+    enum STATUS {
+        + PASSED
+        + FAILED
+        + ERRORED
+    }
+
+    class TestResult {
+        - name: String
+        --
+        + this(name: String)
+        --
+        + record(status: STATUS)
+        + status(): STATUS
+        --
+        + toString(): String
+    }
+
+    STATUS <--* TestResult
+
+    class TestReport {
+        + this()
+        --
+        + collect(result: TestResult)
+        --
+        + toString(): String
+    }
+
+    TestReport *--> "*" TestResult
+    TestResult <. TestCase
+    Test "*" <--* TestSuite
+
+}
+
+package tests {
+    class IntegerTests {
+        + this()
+        --
+        + setUp()
+        --
+        + addTwoIntegers()
+        + subtractTwoIntegers()
+        + throwAnException()
+    }
+    
+}
+
+IntegerTests -|> TestSuite
+
+Main ..> IntegerTests
+Main .> TestReport
+TestReport .[hidden] Assertions
+Assertions .[hidden]. Test
+
+
+note as N1 
+    Size: 
+    - Main: 12 LoCs
+    - mcunit: 149 LoCs
+    - tests: 30 LocS
+endnote
+
+N1 .[hidden]. tests
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+
+!include ./common.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+note right of Main
+    Size: 22 LoCs
+endnote
+
+package mcunit {
+
+    class Assertions {
+        + {static} assertTrue(c: bool)
+        + {static} assertFalse(c: bool)
+        + {static} assertEquals(o1: Object, o2: Object)
+    }   
+
+    note left of Assertions
+        Size: 16 LoCs
+    endnote
+
+}
+
+package java.lang {
+    class Object {
+        + equals(that: Object): bool
+    }
+    class AssertionError
+
+    Object .[hidden].> AssertionError
+}
+
+mcunit.Assertions .> java.lang.Object
+mcunit.Assertions .> java.lang.AssertionError
+
+Main ..> mcunit.Assertions
+
+@enduml

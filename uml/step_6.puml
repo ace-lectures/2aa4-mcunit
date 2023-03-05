@@ -1,0 +1,117 @@
+@startuml
+
+!include ./common.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+package mcunit {
+
+    class Assertions {
+        + {static} assertTrue(c: bool)
+        + {static} assertFalse(c: bool)
+        + {static} assertEquals(o1: Object, o2: Object)
+    }   
+
+    interface Test {
+        + run(collector: TestReport)
+    }
+
+    abstract class TestCase <<final>> implements Test {
+        + <<final>> run(collector: TestReport)
+        --
+        - runSetUp(context: Object)
+        - runTest(context: Object)
+        - runTearDown(context: Object)
+    }
+
+    class TestSuite implements Test {
+        + <<final>> run(collector: TestReport)
+        --
+        + add(test: Test)
+    }
+
+
+    enum STATUS {
+        + PASSED
+        + FAILED
+        + ERRORED
+    }
+
+    class TestResult {
+        - name: String
+        --
+        + this(name: String)
+        --
+        + record(status: STATUS)
+        + status(): STATUS
+        --
+        + toString(): String
+    }
+
+    STATUS <--* TestResult
+
+    class TestReport {
+        + this()
+        --
+        + collect(result: TestResult)
+        --
+        + toString(): String
+    }
+
+    TestReport *--> "*" TestResult
+    TestResult <. TestCase
+    Test "*" <--* TestSuite
+
+    class TestFactory {
+        + build(klass: Class): Test
+    }
+
+    Test <. TestFactory
+
+
+    package tags {
+        annotation Before 
+        annotation After 
+        annotation tags.Test 
+        annotation Suite 
+        Before .[hidden] After
+    }
+
+    TestFactory ..> tags
+    TestCase ..> tags
+}
+
+package tests {
+    class IntegerTests <<Suite>> {
+        + <<before>> setUpContextForX()
+        + <<before>> setUpContextForY()
+        --
+        + <<test>> addTwoIntegers()
+        + <<test>> subtractTwoIntegers()
+        + <<test>> throwAnException()
+    }
+    
+}
+
+    note as N1 
+        Size: 
+        - Main: 13 LoCs
+        - mcunit: 193 LoCs
+        - tests: 27 LocS
+    endnote
+
+Main ..> IntegerTests
+Main .> TestReport
+Main ..> TestFactory
+TestReport .[hidden] Assertions
+TestReport .[hidden] STATUS
+IntegerTests .> tags
+Assertions .[hidden]. Test
+
+
+
+
+
+@enduml

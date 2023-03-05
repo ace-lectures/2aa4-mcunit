@@ -1,0 +1,67 @@
+@startuml
+
+!include ./common.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+package mcunit {
+
+    class Assertions {
+        + {static} assertTrue(c: bool)
+        + {static} assertFalse(c: bool)
+        + {static} assertEquals(o1: Object, o2: Object)
+    }   
+
+    abstract class TestCase {
+        + <<final>> run()
+        --
+        # {abstract} test()
+    }
+
+}
+
+package tests {
+    class AddTwoIntegers {
+        # <<override>> test()
+    }
+    class SubtractTwoIntegers {
+        # <<override>> test()
+    }
+    class ThrowAnException {
+        # <<override>> test()
+    }
+
+}
+
+TestCase <|-- tests.AddTwoIntegers 
+TestCase <|-- tests.SubtractTwoIntegers 
+TestCase <|-- tests.ThrowAnException
+
+package java.lang {
+    class Object {
+        + equals(that: Object): bool
+    }
+    class AssertionError
+    Object .[hidden].> AssertionError
+}
+
+mcunit.Assertions .> java.lang.Object
+mcunit.Assertions .> java.lang.AssertionError
+
+tests.AddTwoIntegers <.. Main
+tests.SubtractTwoIntegers <.. Main
+tests.ThrowAnException <.. Main
+
+Assertions <.. SubtractTwoIntegers
+Assertions <.. AddTwoIntegers
+
+note as N1 
+ Size: 
+   - Main: 11 LoCs
+   - mcunit: 32 LoCs
+   - tests: 31 LocS
+endnote
+
+@enduml
