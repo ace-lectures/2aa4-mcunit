@@ -1,7 +1,7 @@
+import mcunit.Test;
 import mcunit.TestReport;
-import tests.AddTwoIntegers;
-import tests.SubtractTwoIntegers;
-import tests.ThrowAnException;
+import tests.IntegerTests;
+
 
 public class Main {
     
@@ -9,10 +9,8 @@ public class Main {
         System.out.println("# 2AA4 - McUnit Demo");
 
         TestReport report = new TestReport();
-        new AddTwoIntegers().run(report);
-        new SubtractTwoIntegers().run(report);
-        new ThrowAnException().run(report);
-
+        Test integerTests = new IntegerTests();
+        integerTests.run(report);
         System.out.println(report);
     }
 
