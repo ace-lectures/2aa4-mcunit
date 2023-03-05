@@ -1,13 +1,13 @@
 package mcunit;
 
+import mcunit.tags.After;
+import mcunit.tags.Before;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
 public final class TestCase implements Test {
-
-    private static final String SETUP = "setUp";
-    private static final String TEARDOWN = "tearDown";
 
     private final Method testMethod;
     private final Class klass;
@@ -49,17 +49,19 @@ public final class TestCase implements Test {
 
     private void runSetUp(Object context)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if(getMethodByName(SETUP).isPresent()) {
-            Method setup = getMethodByName(SETUP).get();
-            setup.invoke(context);
+        for(Method candidate: klass.getMethods()) {
+            if (candidate.isAnnotationPresent(Before.class)) {
+                candidate.invoke(context);
+            }
         }
     }
 
     private void runTearDown(Object context)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if(getMethodByName(TEARDOWN).isPresent()) {
-            Method setup = getMethodByName(TEARDOWN).get();
-            setup.invoke(context);
+        for(Method candidate: klass.getMethods()) {
+            if (candidate.isAnnotationPresent(After.class)) {
+                candidate.invoke(context);
+            }
         }
     }
 
@@ -69,12 +71,4 @@ public final class TestCase implements Test {
 
     }
 
-    private Optional<Method> getMethodByName(String methodName) {
-        try {
-            Method result = this.klass.getMethod(methodName);
-            return Optional.of(result);
-        } catch(NoSuchMethodException nme) {
-            return Optional.empty();
-        }
-    }
 }

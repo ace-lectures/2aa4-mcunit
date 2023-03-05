@@ -9,7 +9,7 @@ public class TestFactory {
     public Test build(Class suite) {
         TestSuite result = new TestSuite();
         for(Method candidate: suite.getMethods()) {
-            if(candidate.getName().startsWith(TEST_PREFIX)) {
+            if(candidate.isAnnotationPresent(mcunit.tags.Test.class)) {
                 result.add(new TestCase(suite, candidate));
             }
         }
